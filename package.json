@@ -16,6 +16,7 @@
   },
   "homepage": "https://github.com/maryRom01/Playwright_Allure_GitHub_Actions#readme",
   "devDependencies": {
-    "@playwright/test": "^1.32.3"
+    "@playwright/test": "^1.32.3",
+    "allure-playwright": "^2.1.0"
   }
 }

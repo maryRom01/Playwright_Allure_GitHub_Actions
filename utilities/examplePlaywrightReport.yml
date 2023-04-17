@@ -1,9 +1,10 @@
 name: Playwright Tests
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main ]
   pull_request:
-    branches: [ main, master ]
+    branches: [ main ]
+    
 jobs:
   test:
     timeout-minutes: 60
@@ -18,12 +19,12 @@ jobs:
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
     - name: Run Playwright tests
-      run: npx playwright test --reporter=line,allure-playwright
+      run: npx playwright test --reporter=html
     - uses: actions/upload-artifact@v3
       if: always()
       with:
-        name: allure-results
-        path: allure-results
+        name: playwright-report
+        path: playwright-report/
         retention-days: 30
   publish_report:
     needs: [test]
@@ -43,8 +44,8 @@ jobs:
     - name: Download zipped HTML report
       uses: actions/download-artifact@v3
       with:
-        name: allure-results
-        path: allure-results
+        name: playwright-report
+        path: ${{ env.HTML_REPORT_URL_PATH }}
     - name: Push HTML report
       timeout-minutes: 3
       run: |
