@@ -1,92 +1,56 @@
 name: Playwright Tests
+
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main ]
   pull_request:
-    branches: [ main, master ]
+    branches: [ main ]
+
 jobs:
-  test:
-    name: Test
-    timeout-minutes: 60
+  build:
+
     runs-on: ubuntu-latest
+
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
+    - uses: actions/checkout@v2
+    - name: Use Node.js
+      uses: actions/setup-node@v2
       with:
-        node-version: 16
-    - name: Install dependencies
-      run: npm ci
-    - name: Install Playwright Browsers
-      run: npx playwright install --with-deps
-    - name: Run Playwright tests
-      run: npx playwright test --reporter=line,allure-playwright
-    - uses: actions/upload-artifact@v3
-      if: always()
+        node-version: '14'
+        cache: 'npm'
+    - run: npm ci
+    - run: npx playwright install
+    - run: npm test
+  
+    - uses: actions/upload-artifact@master
       with:
         name: allure-results
         path: allure-results
-        retention-days: 30
-  publish_report:
-    needs: [test]
-    name: Publish HTML report
-    if: always()
-    runs-on: ubuntu-latest
-    continue-on-error: true
-    steps:
+        retention-days: 20
+        
     - name: Get Allure history
-      uses: actions/checkout@v3
+      uses: actions/checkout@v2
       if: always()
       continue-on-error: true
       with:
         ref: gh-pages
         path: gh-pages
-    - name: Allure report action
+    
+    - name: Test marketplace action
       uses: simple-elf/allure-report-action@master
       if: always()
+      id: allure-report
       with:
         allure_results: allure-results
+        gh_pages: gh-pages
+        allure_report: allure-report
         allure_history: allure-history
-        keep_reports: 10
-    - name: Deploy report to GitHub Pages
+        keep_reports: 20
+
+    - name: Deploy report to Github Pages
       if: always()
-      uses: peaceiris/actions-gh-pages@v3
+      uses: peaceiris/actions-gh-pages@v2
       env:
         PERSONAL_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         PUBLISH_BRANCH: gh-pages
-        PUBLISH_DIR: allure-history    
-
-    # - name: Checkout GitHub Pages branches
-    #   uses: actions/checkout@v3
-    #   with:
-    #     ref: main
-    # - name: Set Git user
-    #   run: |
-    #     git config --global user.name "github-actions[bot]"
-    #     git config --global user.email "github-actions[bot]@users.noreply.github.com"
-    # - name: Download zipped HTML report
-    #   uses: actions/download-artifact@v3
-    #   with:
-    #     name: allure-results
-    #     path: allure-results
-    # - name: Push HTML report
-    #   timeout-minutes: 3
-    #   run: |
-    #     git add .
-    #     git commit -m "workflow: add HTML report for run-id ${{ github.run_id }} (attempt: ${{ github.run_attempt }})"
-
-    #     while true; do 
-    #       git pull --rebase
-    #       if [ $? -ne 0 ]; then
-    #         echo "Failed to rebase. Please review manually."
-    #         exit 1
-    #       fi 
-
-    #       git push 
-    #       if [$? -eq 0 ]; then
-    #         echo "Successfully pushed HTML report to repo"
-    #         exit 0
-    #       fi  
-    #     done
-   
-
-
+        PUBLISH_DIR: allure-history

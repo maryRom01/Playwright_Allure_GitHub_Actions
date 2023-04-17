@@ -3,7 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "allure:generate": "npx allure generate ./allure-results --clean",
+    "allure:open": "npx allure open ./allure-report",
+    "test": "npx playwright test || :",
+    "posttest": "npm run allure:generate"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/maryRom01/Playwright_Allure_GitHub_Actions.git"
