@@ -41,7 +41,7 @@ jobs:
         ref: gh-pages
         path: gh-pages
     - name: Allure report action
-      uses: maryRom01/allure-report-action@main
+      uses: simple-elf/allure-report-action@master
       if: always()
       with:
         allure_results: allure-results
