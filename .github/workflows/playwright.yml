@@ -56,7 +56,9 @@ jobs:
           if [ $? -ne 0 ]; then
             echo "Failed to rebase. Please review manually."
             exit 1
-          fi  
+          fi 
+
+          git push 
           if [$? -eq 0 ]; then
             echo "Successfully pushed HTML report to repo"
             exit 0
