@@ -26,6 +26,7 @@ jobs:
         path: playwright-report/
         retention-days: 30
   publish_report:
+    needs: [test]
     name: Publish HTML report
     if: always()
     runs-on: ubuntu-latest
