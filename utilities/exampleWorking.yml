@@ -1,4 +1,4 @@
-name: Test Playwright with Allure report
+name: ci
 
 on:
   push:
