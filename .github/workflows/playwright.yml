@@ -2,9 +2,9 @@ name: Test Playwright with Allure report
 
 on:
   push:
-    branches: [ gh-pages ]
+    branches: [ develop ]
   pull_request:
-    branches: [ gh-pages ]
+    branches: [ develop ]
 
 jobs:
   build:
