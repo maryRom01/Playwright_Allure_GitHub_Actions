@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    
+    "allure:generate": "npx allure generate ./allure-results --clean",
+    "allure:open": "npx allure open ./allure-report",
+    "test": "npx playwright test --reporter=line,allure-playwright || :",
+    "posttest": "npm run allure:generate"
   },
   "keywords": [],
   "author": "",
