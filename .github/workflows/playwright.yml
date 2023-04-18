@@ -12,30 +12,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Use Node.js
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
         node-version: '14'
         cache: 'npm'
     - run: npm ci
     - run: npx playwright install
     - run: npm test
-  
+
     - uses: actions/upload-artifact@master
       with:
         name: allure-results
         path: allure-results
         retention-days: 20
-        
+
     - name: Get Allure history
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       if: always()
       continue-on-error: true
       with:
         ref: gh-pages
         path: gh-pages
-    
+
     - name: Test marketplace action
       uses: simple-elf/allure-report-action@master
       if: always()
@@ -49,8 +49,18 @@ jobs:
 
     - name: Deploy report to Github Pages
       if: always()
-      uses: peaceiris/actions-gh-pages@v2
+      uses: peaceiris/actions-gh-pages@v3
       env:
         PERSONAL_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         PUBLISH_BRANCH: gh-pages
         PUBLISH_DIR: allure-history
+
+    - name: Link to the report
+      if: always()
+      uses: Sibz/github-status-action@v1
+      with: 
+          authToken: ${{secrets.GITHUB_TOKEN}}
+          context: 'Allure report'
+          state: 'success'
+          sha: ${{ github.event.pull_request.head.sha }}
+          target_url: maryRom01.github.io/github-allure-history/${{ github.run_number }}        
