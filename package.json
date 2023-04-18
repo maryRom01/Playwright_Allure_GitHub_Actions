@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "allure:generate": "npx allure generate ./allure-results --clean",
-    "allure:open": "npx allure open ./allure-report",
+    "allure:generate": "allure generate allure-results -o allure-report --clean",
+    "allure:open": "npx allure open allure-report",
     "test": "npx playwright test || :",
     "posttest": "npm run allure:generate"
   },
