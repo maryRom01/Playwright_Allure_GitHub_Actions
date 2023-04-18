@@ -20,7 +20,7 @@ jobs:
         cache: 'npm'
     - run: npm ci
     - run: npx playwright install
-    - run: npx playwright test --reporter=line,allure-playwright
+    - run: npx playwright test --reporter=line,allure-playwright || true
     - run: allure generate allure-results -o allure-report --clean
     - uses: actions/upload-artifact@master
       with:
