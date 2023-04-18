@@ -20,7 +20,7 @@ jobs:
     - run: npx playwright install
     - run: npx playwright test --reporter=line,allure-playwright || true
     - run: npx allure generate ./allure-results -o allure-report --clean
-    - uses: actions/upload-artifact@master
+    - uses: actions/upload-artifact@main
       with:
         name: allure-results
         path: allure-results
@@ -33,7 +33,7 @@ jobs:
         ref: gh-pages
         path: gh-pages
     - name: Test marketplace action
-      uses: simple-elf/allure-report-action@master
+      uses: maryRom01/allure-report-action@main
       if: always()
       id: allure-report
       with:
@@ -49,12 +49,12 @@ jobs:
         PERSONAL_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         PUBLISH_BRANCH: gh-pages
         PUBLISH_DIR: allure-history
-    - name: Link to the report
-      if: always()
-      uses: Sibz/github-status-action@v1
-      with: 
-          authToken: ${{secrets.GITHUB_TOKEN}}
-          context: 'Allure report'
-          state: 'success'
-          sha: ${{ github.event.pull_request.head.sha }}
-          target_url: maryRom01.github.io/github-allure-history/${{ github.run_number }}        
+    # - name: Link to the report
+    #   if: always()
+    #   uses: Sibz/github-status-action@v1
+    #   with: 
+    #       authToken: ${{secrets.GITHUB_TOKEN}}
+    #       context: 'Allure report'
+    #       state: 'success'
+    #       sha: ${{ github.event.pull_request.head.sha }}
+    #       target_url: maryRom01.github.io/github-allure-history/${{ github.run_number }}        
